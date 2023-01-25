@@ -9,7 +9,7 @@ jobs:
   auto_update:
     runs-on: ubuntu-latest
     env:
-      WORK_PARENT_REPOSITORY: 'hwanyseo/action_parent'
+      WORK_PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent-autosubupdate'
       WORK_CHECKOUT_BRANCH: 'main'
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
