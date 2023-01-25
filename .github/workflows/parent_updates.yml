@@ -1,0 +1,111 @@
+name: 'parent updates'
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  auto_update:
+    runs-on: ubuntu-latest
+    env:
+      WORK_PARENT_REPOSITORY: 'hwany7seo/action_parent'
+      WORK_CHECKOUT_BRANCH: 'main'
+      PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
+      CHECKOUT_BRANCH: 'main'
+      PR_AGAINST_BRANCH: 'main'
+      OWNER: 'hwany7seo'
+      COMMIT_MSG: 'Update Submodule'
+      BASE_COMMIT_MSG: '] Update Submodule'
+      PROCESS_RUN_ID: 1
+      MAIN_REVIEWER: 'hwany7seo'
+      SUB_REVIEWER: 'hwanyseo'
+      LABEL: Submodule Auto Update
+      AUTO_BRANCH_NAME: 'autogensubmodule/'
+      GIT_USER: 'cubrid'
+      GIT_USER_MAIL: 'github-actions@github.com'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get PR Info
+      shell: bash
+      run: |
+        COMMITTER_NAME=$(echo $(git log -1 --format=%an))
+        COMMIT_MESSAGE=$(echo $(git log -1 --format=%s))
+        echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
+        echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
+        echo "COMMIT_MSG=$(git log -1 --format=%s | cut -d ']' -f1)${{ env.BASE_COMMIT_MSG }}" >> $GITHUB_ENV
+        echo "PROCESS_RUN_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
+        echo "pr-body=${{ toJSON(github.event.head_commit.message) }}" >> $GITHUB_OUTPUT
+        echo "committer-name=${COMMITTER_NAME}" >> $GITHUB_OUTPUT
+        echo "reviewer-name=${{ env.MAIN_REVIEWER }}" >> $GITHUB_OUTPUT
+        if [ ${COMMITTER_NAME}==${{ env.MAIN_REVIEWER }} ]; then
+          echo "reviewer-name=${{ env.SUB_REVIEWER }}" >> $GITHUB_OUTPUT
+        fi
+      id: getprinfo
+    - name: Checkout parent repository and branch
+      uses: actions/checkout@v2
+      with:
+        token: ${{ secrets.TOKEN }}
+        repository: ${{ env.WORK_PARENT_REPOSITORY }}
+        ref: ${{ env.WORK_CHECKOUT_BRANCH }}
+        submodules: true
+        fetch-depth: 0
+    - name: Create new branch and push changes
+      shell: bash
+      run: |
+        git config user.name ${{ env.GIT_USER }}
+        git config user.email ${{ env.GIT_USER_MAIL }}
+        git submodule update --remote
+        git checkout -b ${{ env.AUTO_BRANCH_NAME}}$GITHUB_RUN_ID
+        git commit -am "${{ github.event.head_commit.message }}"
+        git push --set-upstream origin ${{ env.AUTO_BRANCH_NAME }}$GITHUB_RUN_ID
+    - name: Create pull request against target branch
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.TOKEN }}
+        script: |
+          await github.rest.pulls.create({
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            head: '${{ env.AUTO_BRANCH_NAME }}${{ env.PROCESS_RUN_ID }}',
+            base: '${{ env.PR_AGAINST_BRANCH }}',
+            title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
+            body: ${{ toJSON(github.event.head_commit.message) }},
+          });
+    - name: Update PullRequest (Review,Assgnees,Reviewer)
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.TOKEN }}
+        script: |
+          const res = await github.rest.issues.listForRepo({
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+          });
+          const pr = res.data.filter(i => i.title.includes(${{ env.PROCESS_RUN_ID }} ));
+          const prNumber = pr[0].number;  
+          await github.rest.pulls.update({
+            pull_number: prNumber,
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            title: '${{ env.COMMIT_MSG }} - Auto-generated'
+          });
+          await github.rest.issues.addAssignees({
+            issue_number: prNumber,
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            assignees: ['${{ steps.getprinfo.outputs.committer-name }}']
+          });
+          await github.rest.pulls.requestReviewers({
+            pull_number: prNumber,
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            reviewers: ['${{ steps.getprinfo.outputs.reviewer-name }}']
+          });
+          await github.rest.issues.addLabels({
+            issue_number: prNumber,
+            owner: '${{ env.OWNER }}',
+            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            labels: ['${{ env.LABEL }}']
+          });
+
+
