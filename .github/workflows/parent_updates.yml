@@ -62,7 +62,7 @@ jobs:
     - name: Create pull request against target branch
       uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.TOKEN }}
+        github-token: ${{ secrets.ACCESS_TOKEN }}
         script: |
           await github.rest.pulls.create({
             owner: '${{ env.OWNER }}',
@@ -75,7 +75,7 @@ jobs:
     - name: Update PullRequest (Review,Assgnees,Reviewer)
       uses: actions/github-script@v6
       with:
-        github-token: ${{ secrets.TOKEN }}
+        github-token: ${{ secrets.ACCESS_TOKEN }}
         script: |
           const res = await github.rest.issues.listForRepo({
             owner: '${{ env.OWNER }}',
