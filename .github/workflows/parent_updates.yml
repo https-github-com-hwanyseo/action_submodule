@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORK_PARENT_REPOSITORY: 'hwanyseo/action_parent'
+      WORK_PARENT_OWNER: 'hwanyseo'
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
       PR_AGAINST_BRANCH: 'main'
@@ -68,8 +69,8 @@ jobs:
         github-token: ${{ secrets.ACCESS_TOKEN }}
         script: |
           await github.rest.pulls.create({
-            owner: '${{ env.OWNER }}',
-            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
+            owner: '${{ env.WORK_PARENT_OWNER }}',
+            repo: '${{ env.WORK_PARENT_REPOSITORY }}'.split('/')[1].trim(),
             head: '${{ env.AUTO_BRANCH_NAME }}${{ env.PROCESS_RUN_ID }}',
             base: '${{ env.PR_AGAINST_BRANCH }}',
             title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
