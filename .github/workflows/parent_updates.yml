@@ -18,8 +18,8 @@ jobs:
       COMMIT_MSG: 'Update Submodule'
       BASE_COMMIT_MSG: '] Update Submodule'
       PROCESS_RUN_ID: 1
-      MAIN_REVIEWER: 'hwany7seo'
-      SUB_REVIEWER: 'hwanyseo'
+      MAIN_REVIEWER: 'hwanyseo'
+      SUB_REVIEWER: 'hwany7seo'
       LABEL: Submodule Auto Update
       AUTO_BRANCH_NAME: 'autogensubmodule/'
       GIT_USER: 'cubrid'
