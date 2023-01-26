@@ -45,7 +45,7 @@ jobs:
     - name: Checkout parent repository and branch
       uses: actions/checkout@v2
       with:
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.ACCESS_TOKEN }}
         repository: ${{ env.PARENT_REPOSITORY }}
         ref: ${{ env.WORK_CHECKOUT_BRANCH }}
         submodules: true
