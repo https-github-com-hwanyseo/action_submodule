@@ -60,7 +60,7 @@ jobs:
         git fetch upstream
         git merge upstream/${{ env.CHECKOUT_BRANCH }}
         git push
-        git submodule update --remote ${{ env.SUB_MODULE_NAME }}$
+        git submodule update --remote ${{ env.SUB_MODULE_NAME }}
         git checkout -b ${{ env.AUTO_BRANCH_NAME}}$GITHUB_RUN_ID
         git commit -am "${{ github.event.head_commit.message }}"
         git push --set-upstream origin ${{ env.AUTO_BRANCH_NAME }}$GITHUB_RUN_ID
