@@ -14,6 +14,7 @@ jobs:
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
       PR_AGAINST_BRANCH: 'main'
+      SUB_MODULE_NAME: 'action_submodule'
       OWNER: 'https-github-com-hwanyseo'
       COMMIT_MSG: 'Update Submodule'
       BASE_COMMIT_MSG: '] Update Submodule'
@@ -23,7 +24,7 @@ jobs:
       LABEL: Submodule Auto Update
       AUTO_BRANCH_NAME: 'autogensubmodule/'
       GIT_USER: 'cubrid'
-      GIT_USER_MAIL: 'github-actions@github.com'
+      GIT_USER_MAIL: 'cubrid'
     steps:
     - uses: actions/checkout@v2
     - name: Get PR Info
@@ -59,7 +60,7 @@ jobs:
         git fetch upstream
         git merge upstream/${{ env.CHECKOUT_BRANCH }}
         git push
-        git submodule update --remote
+        git submodule update --remote ${{ env.SUB_MODULE_NAME }}$
         git checkout -b ${{ env.AUTO_BRANCH_NAME}}$GITHUB_RUN_ID
         git commit -am "${{ github.event.head_commit.message }}"
         git push --set-upstream origin ${{ env.AUTO_BRANCH_NAME }}$GITHUB_RUN_ID
