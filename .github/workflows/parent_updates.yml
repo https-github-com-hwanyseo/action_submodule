@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORK_PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent-autosubupdate'
-      WORK_PARENT_OWNER: 'hwanyseo'
+      WORK_PARENT_OWNER: 'https-github-com-hwanyseo'
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
       PR_AGAINST_BRANCH: 'main'
