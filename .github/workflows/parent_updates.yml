@@ -16,7 +16,7 @@ jobs:
       CHECKOUT_BRANCH: 'main'
       PR_AGAINST_BRANCH: 'main'
       SUB_MODULE_NAME: 'action_submodule'
-      OWNER: 'https-github-com-hwanyseo'
+      OWNER: 'hwanyseo'
       COMMIT_MSG: 'Update Submodule'
       BASE_COMMIT_MSG: '] Update Submodule'
       PROCESS_RUN_ID: 1
