@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORK_PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent-autosubupdate'
+      WORK_PARENT_REPO_NAME: 'action_parent-autosubupdate'
       WORK_PARENT_OWNER: 'https-github-com-hwanyseo'
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
@@ -72,7 +73,8 @@ jobs:
           await github.rest.pulls.create({
             owner: '${{ env.OWNER }}',
             repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
-            head: '${{ env.WORK_PARENT_REPOSITORY }}:${{ env.AUTO_BRANCH_NAME }}${{ env.PROCESS_RUN_ID }}',
+            head: '${{ env.WORK_PARENT_OWNER }}:${{ env.AUTO_BRANCH_NAME }}${{ env.PROCESS_RUN_ID }}',
+            head_repo : '${{ env.WORK_PARENT_REPO_NAME }}'
             base: '${{ env.PR_AGAINST_BRANCH }}',
             title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
             body: ${{ toJSON(github.event.head_commit.message) }},
