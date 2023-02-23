@@ -10,13 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WORK_PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent-autosubupdate'
-      WORK_PARENT_REPO_NAME: 'action_parent-autosubupdate'
       WORK_PARENT_OWNER: 'https-github-com-hwanyseo'
       PARENT_REPOSITORY: 'https-github-com-hwanyseo/action_parent'
       CHECKOUT_BRANCH: 'main'
       PR_AGAINST_BRANCH: 'main'
       SUB_MODULE_NAME: 'action_submodule'
-      OWNER: 'hwanyseo'
+      OWNER: 'https-github-com-hwanyseo'
       COMMIT_MSG: 'Update Submodule'
       BASE_COMMIT_MSG: '] Update Submodule'
       PROCESS_RUN_ID: 1
