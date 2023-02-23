@@ -34,7 +34,10 @@ jobs:
         COMMIT_MESSAGE=$(echo $(git log -1 --format=%s))
         echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
         echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
-        echo "COMMIT_MSG=$(git log -1 --format=%s | cut -d ']' -f1)${{ env.BASE_COMMIT_MSG }}" >> $GITHUB_ENV
+	RET=$(git log -1 --format=%s | cut -d ']' -f1)
+	if [ -n ${RET} ]; then
+          echo "COMMIT_MSG=$(git log -1 --format=%s | cut -d ']' -f1)${{ env.BASE_COMMIT_MSG }}" >> $GITHUB_ENV
+        fi
         echo "PROCESS_RUN_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
         echo "committer-name=${COMMITTER_NAME}" >> $GITHUB_OUTPUT
         echo "reviewer-name=${{ env.MAIN_REVIEWER }}" >> $GITHUB_OUTPUT
