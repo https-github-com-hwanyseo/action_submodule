@@ -37,7 +37,6 @@ jobs:
         echo "commit-message=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
         echo "COMMIT_MSG=$(git log -1 --format=%s | cut -d ']' -f1)${{ env.BASE_COMMIT_MSG }}" >> $GITHUB_ENV
         echo "PROCESS_RUN_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
-        echo "pr-body=${{ toJSON(github.event.head_commit.message) }}" >> $GITHUB_OUTPUT
         echo "committer-name=${COMMITTER_NAME}" >> $GITHUB_OUTPUT
         echo "reviewer-name=${{ env.MAIN_REVIEWER }}" >> $GITHUB_OUTPUT
         if [ ${COMMITTER_NAME}==${{ env.MAIN_REVIEWER }} ]; then
