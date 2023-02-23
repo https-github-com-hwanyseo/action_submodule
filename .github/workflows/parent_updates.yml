@@ -78,7 +78,7 @@ jobs:
             body: ${{ toJSON(github.event.head_commit.message) }},
           });
           const prNumber = res.data.number;
-          console.log(prNumber)w
+          console.log(prNumber)
     - name: Update PullRequest (Review,Assgnees,Reviewer)
       uses: actions/github-script@v6
       with:
