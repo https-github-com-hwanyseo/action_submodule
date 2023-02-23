@@ -77,8 +77,8 @@ jobs:
             title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
             body: ${{ toJSON(github.event.head_commit.message) }},
           });
-         const prNumber = res.data.number;
-         echo prNumber
+          const prNumber = res.data.number;
+          console.log(prNumber)w
     - name: Update PullRequest (Review,Assgnees,Reviewer)
       uses: actions/github-script@v6
       with:
