@@ -77,20 +77,7 @@ jobs:
             title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
             body: ${{ toJSON(github.event.head_commit.message) }},
           });
-          const prNum = res.data.number;
-          console.log(prNum)
-    - name: Update PullRequest (Review,Assgnees,Reviewer)
-      uses: actions/github-script@v6
-      with:
-        github-token: ${{ secrets.ACCESS_TOKEN }}
-        script: |
-          const res = await github.rest.issues.listForRepo({
-            owner: '${{ env.OWNER }}',
-            repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
-          });
-          const pr = res.data.filter(i => i.title.includes(${{ env.PROCESS_RUN_ID }} ));
-          const prNumber = pr[0].number;  
-          console.log(prNumber)
+          const prNumber = res.data.number;
           await github.rest.pulls.update({
             pull_number: prNumber,
             owner: '${{ env.OWNER }}',
