@@ -68,7 +68,7 @@ jobs:
       with:
         github-token: ${{ secrets.ACCESS_TOKEN }}
         script: |
-          await github.rest.pulls.create({
+          const res = await github.rest.pulls.create({
             owner: '${{ env.OWNER }}',
             repo: '${{ env.PARENT_REPOSITORY }}'.split('/')[1].trim(),
             head: '${{ env.WORK_PARENT_OWNER }}:${{ env.AUTO_BRANCH_NAME }}${{ env.PROCESS_RUN_ID }}',
@@ -77,6 +77,8 @@ jobs:
             title: '${{ env.COMMIT_MSG }} - Auto-generated-${{ env.PROCESS_RUN_ID }}',
             body: ${{ toJSON(github.event.head_commit.message) }},
           });
+         const prNumber = res.data.number;
+         echo prNumber
     - name: Update PullRequest (Review,Assgnees,Reviewer)
       uses: actions/github-script@v6
       with:
